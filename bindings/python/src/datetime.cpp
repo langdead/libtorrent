@@ -60,14 +60,14 @@ struct time_duration_to_python
 
 struct time_point_to_python
 {
-    static PyObject* convert(lt::time_point pt)
+    static PyObject* convert(lt::time_point const pt)
     {
         using std::chrono::system_clock;
         using std::chrono::duration_cast;
         time_t const tm = system_clock::to_time_t(system_clock::now()
             + duration_cast<system_clock::duration>(pt - lt::clock_type::now()));
 
-        std::tm* date = std::gmtime(&tm);
+        std::tm* date = std::localtime(&tm);
         object result = datetime_datetime(
             (int)1900 + date->tm_year
           // tm use 0-11 and we need 1-12
